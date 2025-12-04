@@ -1,0 +1,64 @@
+{Horizontal Scaling :
+        +Tăng khả năng chịu tải tốt hơn 
+        +Nhiều server cùng xử lý request → không bị quá tải trên 1 máy.
+        +Dễ dàng mở rộng theo nhu cầu Cloud (AWS, GCP, Azure) cho phép thêm instance mới trong vài giây.
+        +Độ tin cậy cao (high availability)
+        +Nếu 1 server chết, các server khác vẫn chạy → hệ thống không downtime.
+        +Chi phí linh hoạt
+        +Có thể scale lên/down theo mùa vụ hoặc số user mà không cần nâng cấu hình đắt tiền.
+
+Nhược điểm:
++Cần load balancer
++Phân phối request đều giữa các instance.
++Quản lý phức tạp hơn
++Session, cache, database, file storage phải đồng bộ nhiều máy.
++Latency / network overhead
++Dữ liệu phải sync qua mạng → có thể chậm hơn so với 1 máy mạnh. }
+
+0 nên đóng kết nối liên tục đối với mongo
+trong ngữ cảnh của mongoC nhóm kết nối là tập hợp các kết nối của csdl có thể tái sử dụng đc duy trì ở db không chỉ mỗi mongo mà oracle,mysql đều có, 
+vi dụ khi ứng dụng gửi request connect tới csdl thì mongoC kiểm tra nhóm kết nối có nhóm kết nối nào 0 nếu có thì tái sử dụng nếu 0 thì tạo kết nối mới thêm vào nhóm 
+tac dụng của polSize có thể cải thiện hiệu xuất và khả năng mở rông ứng dụng thay = dạng chi phí create Db và đóng kết nối csdl
+ 
+
+accessToken công dụng để gọi APi dùng trên mỗi request thời gian ngắn lưu ở localStore
+Access Token
+
+Là mã xác thực chính mà client (browser/mobile) gửi lên server mỗi khi gọi API.
+
+Thời gian sống ngắn (expires: '2 days' trong code của bạn).
+
+Chứa thông tin user (ID, role, email…) đã được ký bằng privateKey.
+
+Server sử dụng publicKey để verify chữ ký → biết token này có hợp lệ hay không.
+
+
+refreshToken công dụng câp accessToken mới dùng khi accessToken hết hạn lưu ở DB
+
+2. Refresh Token
+
+Là token dùng để xin cấp accessToken mới.
+
+Thời gian sống dài hơn (7 days trong code của bạn).
+
+Không dùng để gọi API (trừ API /refresh-token).
+
+Thường được lưu trong:
+
+Database (để có thể revoke),
+
+hoặc HttpOnly cookie (an toàn hơn).
+
+🔥 Tại sao cần Refresh Token?
+
+Vì accessToken sống ngắn → user sẽ bị logout liên tục nếu không có refreshToken.
+Khi accessToken hết hạn, client gửi refreshToken lên server:
+Server kiểm tra refreshToken hợp lệ không.
+Nếu hợp lệ → tạo token pair mới và trả lại client.
+→ Điều này giúp giữ
+
+
+npx tree-cli
+
+npm run start
+//cần viết thêm hàm veryfy sử dụng public token thường dùng“Secret key dùng để verify và sign. Nếu người khác lấy được secret key thì họ có thể tự ký (tạo signature) giả mạo giống của bạn.”
